@@ -14,7 +14,7 @@ module.exports = (app) => {
       callBack(null, path) // './public/images/' directory name where save the file
     },
     filename: (req, file, callBack) => {
-      callBack(null, file.originalname.replaceAll(' ', '_'))
+      callBack(null, file.originalname.replace(/ /g, '_'))
     },
   })
 
