@@ -19,11 +19,15 @@ module.exports = (app) => {
   })
 
   const upload = multer({ storage: storage })
- 
+
+  router.get('/all-photos', students.findZipData)
+
+  router.get('/data-download', students.findAll)
+
   router.post('/school', school.create)
 
   router.post('/student', upload.single('photo'), students.create)
- 
+
   router.get('/school-data', school.findAll)
 
   router.get('/:id', school.findOne)
