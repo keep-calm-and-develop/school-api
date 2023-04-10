@@ -8,13 +8,13 @@ module.exports = (app) => {
 
   var storage = multer.diskStorage({
     destination: (req, photo, callBack) => {
-      const { school_name } = req.body
-      const path = `./public/uploads/${school_name}`
+      const { school_id } = req.body
+      const path = `./public/uploads/${school_id}`
       fs.mkdirSync(path, { recursive: true })
       callBack(null, path) // './public/images/' directory name where save the file
     },
     filename: (req, file, callBack) => {
-      callBack(null, file.originalname.replace(/ /g, '_'))
+      callBack(null, file.originalname)
     },
   })
 
