@@ -3,6 +3,7 @@ const Student = db.students
 const Op = db.Sequelize.Op
 const excel = require('exceljs')
 const fs = require('fs')
+const fse = require('fs-extra')
 const archiver = require('archiver')
 
 // Create and Save a new Tutorial
@@ -107,12 +108,12 @@ exports.findZipData = async (req, res) => {
   try {
     const archive = archiver('zip', { zlib: { level: 9 } })
     const schoolName = req.query.school
-    console.log(schoolName + 'fdfdfdfdfdfdfdfdfdffdf')
+    // console.log(schoolName + 'fdfdfdfdfdfdfdfdfdffdf')
     const folderPath = `./public/uploads/${schoolName}`
     if (!fs.existsSync(folderPath)) {
       return res.status(404).send({ error: 'School folder does not exist' })
     }
-    console.log(folderPath + 'fdfdfdfdfdfdfdfdfdffdf')
+    // console.log(folderPath + 'fdfdfdfdfdfdfdfdfdffdf')
     const output = fs.createWriteStream(`${schoolName}.zip`)
     res.set('Content-Type', 'application/zip')
     res.set('Content-Disposition', `attachment; filename=${schoolName}.zip`)
@@ -136,5 +137,49 @@ exports.findZipData = async (req, res) => {
   } catch (error) {
     console.error(error)
     res.status(500).send('Error creating zip file')
+  }
+}
+exports.deleteAllFilesInDirectory = async (req, res) => {
+  try {
+    const schoolId = req.query.school
+    // console.log(schoolName + 'fdfdfdfdfdfdfdfdfdffdf')
+    const folderPath = `./public/uploads/${schoolId}`
+    if (!fs.existsSync(folderPath)) {
+      return res.status(404).send({ error: 'School folder does not exist' })
+    }
+    // Delete all files inside the directory
+    await fse.emptyDir(folderPath)
+
+    console.log(`All files deleted successfully from directory`)
+    res.status(200).json({
+      message: `All files deleted successfully from directory`,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('error deleting files')
+  }
+}
+
+exports.deleteAllWhere = async (req, res) => {
+  try {
+    const schoolId = req.query.school
+    Student.destroy({
+      where: {
+        school_id: schoolId,
+      },
+    })
+      .then((numDeleted) => {
+        if (numDeleted === 0) {
+          res.status(404).json({ message: 'User not found' })
+        } else {
+          res.json({ message: `Deleted ${numDeleted} user successfully` })
+        }
+      })
+      .catch((err) => {
+        console.error('Error deleting user:', err)
+        res.status(500).json({ message: 'Internal server error' })
+      })
+  } catch (error) {
+    res.status(500).send('error deleting user')
   }
 }

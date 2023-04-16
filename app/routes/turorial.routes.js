@@ -24,6 +24,10 @@ module.exports = (app) => {
 
   router.get('/data-download', students.findAll)
 
+  router.delete('/data-delete', students.deleteAllWhere)
+
+  router.delete('/photos-delete', students.deleteAllFilesInDirectory)
+
   router.post('/school', school.create)
 
   router.post('/student', upload.single('photo'), students.create)
