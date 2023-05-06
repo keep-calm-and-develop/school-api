@@ -38,6 +38,9 @@ module.exports = (sequelize, Sequelize) => {
       blood_group: {
         type: Sequelize.STRING,
       },
+      date_time: {
+        type: Sequelize.DATE,
+      }
     },
     {
       createdAt: false,

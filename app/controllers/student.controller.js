@@ -5,8 +5,9 @@ const excel = require('exceljs')
 const fs = require('fs')
 const fse = require('fs-extra')
 const archiver = require('archiver')
+const { NOW } = require('sequelize')
 
-// Create and Save a new Tutorial
+// Create and Save a new Student
 exports.create = (req, res) => {
   // Validate request
 
@@ -24,6 +25,7 @@ exports.create = (req, res) => {
     date_of_birth: req.body.date_of_birth,
     photo: req.body.photo,
     photo_name: req.body.photo_name,
+    date_time: new Date().toLocaleString("en-us", {timeZone: "Asia/Calcutta"}) + "",
   }
   if (!req.body.full_name) {
     res.status(400).send({
@@ -31,7 +33,7 @@ exports.create = (req, res) => {
     })
     return
   }
-  // Save Tutorial in the database
+  // Save Student in the database
   Student.create(student)
     .then((data) => {
       res.send(data)
@@ -39,7 +41,7 @@ exports.create = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || 'Some error occurred while creating the Tutorial.',
+          err.message || 'Some error occurred while creating the Student.',
       })
     })
 }
@@ -76,6 +78,7 @@ exports.findAll = async (req, res) => {
         { header: 'School-Id', key: 'school_id', width: 15 },
         { header: 'Photo Name', key: 'photo_name', width: 30 },
         { header: 'Blood Group', key: 'blood_group', width: 40 },
+        { header: 'Date Time',key: 'date_time',width: 30},
       ]
 
       worksheet.getRow(1).eachCell((cell) => {
