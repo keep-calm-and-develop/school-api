@@ -40,7 +40,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       date_time: {
         type: Sequelize.DATE,
-      }
+      },
     },
     {
       createdAt: false,

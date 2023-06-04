@@ -4,6 +4,7 @@ module.exports = (app) => {
   const path = require('path')
   const fs = require('fs')
   const multer = require('multer')
+  const express = require('express')
   var router = require('express').Router()
 
   var storage = multer.diskStorage({
@@ -17,8 +18,14 @@ module.exports = (app) => {
       callBack(null, file.originalname)
     },
   })
+  const baseImagePath = path.normalize(path.join('public', 'uploads'))
 
+  const getImagePath = students.getImage(baseImagePath)
   const upload = multer({ storage: storage })
+
+  router.get('/school/reports', students.fetchReports)
+
+  router.get('/uploads/:schoolId/:imageName', getImagePath)
 
   router.get('/all-photos', students.findZipData)
 
@@ -37,4 +44,6 @@ module.exports = (app) => {
   router.get('/:id', school.findOne)
 
   app.use('/api', router)
+
+  app.use('/public', router)
 }

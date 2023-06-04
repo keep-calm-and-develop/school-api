@@ -1,11 +1,13 @@
 const db = require('../models')
 const Student = db.students
+const School = db.school
 const Op = db.Sequelize.Op
 const excel = require('exceljs')
 const fs = require('fs')
 const fse = require('fs-extra')
 const archiver = require('archiver')
 const { NOW } = require('sequelize')
+const path = require('path')
 
 // Create and Save a new Student
 exports.create = (req, res) => {
@@ -25,7 +27,8 @@ exports.create = (req, res) => {
     date_of_birth: req.body.date_of_birth,
     photo: req.body.photo,
     photo_name: req.body.photo_name,
-    date_time: new Date().toLocaleString("en-us", {timeZone: "Asia/Calcutta"}) + "",
+    date_time:
+      new Date().toLocaleString('en-us', { timeZone: 'Asia/Calcutta' }) + '',
   }
   if (!req.body.full_name) {
     res.status(400).send({
@@ -78,7 +81,7 @@ exports.findAll = async (req, res) => {
         { header: 'School-Id', key: 'school_id', width: 15 },
         { header: 'Photo Name', key: 'photo_name', width: 30 },
         { header: 'Blood Group', key: 'blood_group', width: 40 },
-        { header: 'Date Time',key: 'date_time',width: 30},
+        { header: 'Date Time', key: 'date_time', width: 30 },
       ]
 
       worksheet.getRow(1).eachCell((cell) => {
@@ -184,5 +187,72 @@ exports.deleteAllWhere = async (req, res) => {
       })
   } catch (error) {
     res.status(500).send('error deleting user')
+  }
+}
+exports.getImage = (imageDirectory) => async (req, res) => {
+  try {
+    const { schoolId, imageName } = req.params
+    const imagePath = path.resolve(
+      path.join(imageDirectory.replace('app', ''), schoolId, imageName),
+    )
+
+    return new Promise((resolve, reject) => {
+      res.sendFile(imagePath, (error) => {
+        if (error) {
+          console.error(error)
+          reject(error)
+        } else {
+          resolve()
+        }
+      })
+    }).catch((error) => {
+      console.error(error)
+      res
+        .status(500)
+        .json({ error: 'An error occurred while fetching students photo' })
+    })
+  } catch (error) {
+    console.error('Error fetching students:', error)
+    res.status(500).json({ error: 'An error occurred while fetching students' })
+  }
+}
+exports.fetchReports = async (req, res) => {
+  try {
+    const { schoolId, page, name, mobile1, standard } = req.query
+    const limit = 50
+    const offset = (page - 1) * limit
+
+    const whereCondition = {
+      full_name: name ? { [Op.like]: `%${name}%` } : undefined,
+      mobile_1: mobile1 ? { [Op.like]: `%${mobile1}%` } : undefined,
+      standard: standard ? { [Op.like]: `%${standard}%` } : undefined,
+    }
+
+    // Remove undefined filters
+    Object.keys(whereCondition).forEach((key) => {
+      if (whereCondition[key] === undefined) {
+        delete whereCondition[key]
+      }
+    })
+
+    // const school = await School.findOne({
+    //   where: { id: schoolId },
+    // })
+    // if (!school) {
+    //   return res.status(404).json({ error: 'School not found' })
+    // }
+
+    const students = await Student.findAndCountAll({
+      where: { ...whereCondition, school_id: schoolId },
+      limit,
+      offset,
+    })
+
+    const totalPages = Math.ceil(students.count / limit)
+
+    res.json({ students: students.rows, totalPages })
+  } catch (error) {
+    console.error('Error fetching students:', error)
+    res.status(500).json({ error: 'An error occurred while fetching students' })
   }
 }
