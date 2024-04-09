@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const functions = require('firebase-functions/v2');
 
 const app = express()
 
@@ -24,7 +25,9 @@ require('./app/routes/turorial.routes')(app)
 require('./app/routes/login.route')(app)
 require('./app/routes/admin.route')(app)
 
-const PORT = process.env.PORT || 5000
+const PORT = 3000
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`)
 })
+
+exports.api = functions.https.onRequest(app);
