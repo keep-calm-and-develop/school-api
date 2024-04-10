@@ -32,7 +32,6 @@ exports.create = async (req, res) => {
       school_id: req.body.school_id,
       blood_group: req.body.blood_group,
       date_of_birth: req.body.date_of_birth,
-      photo: req.body.photo,
       photo_name: req.body.photo_name,
       date_time:
         new Date().toLocaleString('en-us', { timeZone: 'Asia/Calcutta' }) + '',
