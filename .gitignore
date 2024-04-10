@@ -1,3 +1,6 @@
 node_modules
 package-lock.json
+storage.rules
+.env
+serviceAccountKey.json
 *.log
