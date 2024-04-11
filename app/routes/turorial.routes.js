@@ -5,8 +5,6 @@ module.exports = (app) => {
 
     router.get('/school/reports', students.fetchReports)
 
-    router.get('/all-photos', students.findZipData)
-
     router.get('/data-download', students.findAll)
 
     router.delete('/data-delete', students.deleteAllWhere)

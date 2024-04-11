@@ -1,5 +1,7 @@
 
 require('dotenv').config()
+// firebase app
+require('./app/firebase.js')
 // express app
 const express = require('express')
 const cors = require('cors')
@@ -25,7 +27,7 @@ require('./app/routes/login.route')(app)
 require('./app/routes/admin.route')(app)
 
 // express server
-// const PORT = process.env.SERVER_PORT || 3000
+// const PORT = process.env.SERVER_PORT || 5000
 // app.listen(PORT, () => {
 //     console.log(`Server is running on port ${PORT}.`)
 // })

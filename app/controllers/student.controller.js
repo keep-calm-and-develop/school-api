@@ -8,6 +8,7 @@ const fse = require('fs-extra')
 const archiver = require('archiver')
 const { NOW } = require('sequelize')
 const path = require('path')
+const admin = require('firebase-admin')
 
 // Create and Save a new Student
 exports.create = async (req, res) => {
@@ -108,53 +109,21 @@ exports.findAll = async (req, res) => {
     res.status(500).send('Error downloading students')
   }
 }
-
-exports.findZipData = async (req, res) => {
-  try {
-    const archive = archiver('zip', { zlib: { level: 9 } })
-    const schoolName = req.query.school
-    // console.log(schoolName + 'fdfdfdfdfdfdfdfdfdffdf')
-    const folderPath = `./public/uploads/${schoolName}`
-    if (!fs.existsSync(folderPath)) {
-      return res.status(404).send({ error: 'School folder does not exist' })
-    }
-    // console.log(folderPath + 'fdfdfdfdfdfdfdfdfdffdf')
-    const output = fs.createWriteStream(`${schoolName}.zip`)
-    res.set('Content-Type', 'application/zip')
-    res.set('Content-Disposition', `attachment; filename=${schoolName}.zip`)
-
-    archive.directory(folderPath, false)
-    archive.pipe(output)
-
-    await new Promise((resolve, reject) => {
-      output.on('close', resolve)
-      archive.on('error', reject)
-      archive.finalize()
-    })
-
-    res.download(`${schoolName}.zip`, async () => {
-      try {
-        await fs.promises.unlink(`${schoolName}.zip`)
-      } catch (error) {
-        console.error(error)
-      }
-    })
-  } catch (error) {
-    console.error(error)
-    res.status(500).send('Error creating zip file')
-  }
-}
 exports.deleteAllFilesInDirectory = async (req, res) => {
   try {
     const schoolId = req.query.school
-    // console.log(schoolName + 'fdfdfdfdfdfdfdfdfdffdf')
-    const folderPath = `./public/uploads/${schoolId}`
-    if (!fs.existsSync(folderPath)) {
-      return res.status(404).send({ error: 'School folder does not exist' })
+    if (!schoolId) {
+        res.status(400).send('school id is required');
+        return;
     }
-    // Delete all files inside the directory
-    await fse.emptyDir(folderPath)
+    const bucket = admin.storage().bucket(process.env.STORAGE_BUCKET);
+    const folder = schoolId.toString();
 
+    async function deleteBucket() {
+        await bucket.deleteFiles({ prefix: folder });
+    }
+
+    await deleteBucket();
     console.log(`All files deleted successfully from directory`)
     res.status(200).json({
       message: `All files deleted successfully from directory`,
