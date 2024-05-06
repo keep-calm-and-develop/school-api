@@ -36,6 +36,7 @@ exports.create = async (req, res) => {
       photo_name: req.body.photo_name,
       date_time:
         new Date().toLocaleString('en-us', { timeZone: 'Asia/Calcutta' }) + '',
+      house: req.body.house,  
     };
 
     // Save Student in the database
@@ -82,6 +83,7 @@ exports.findAll = async (req, res) => {
         { header: 'Photo Name', key: 'photo_name', width: 30 },
         { header: 'Blood Group', key: 'blood_group', width: 40 },
         { header: 'Date Time', key: 'date_time', width: 30 },
+        { header: 'House', key: 'house', width: 30 },
       ]
 
       worksheet.getRow(1).eachCell((cell) => {

@@ -41,6 +41,9 @@ module.exports = (sequelize, Sequelize) => {
       date_time: {
         type: Sequelize.DATE,
       },
+      house: {
+        type: Sequelize.STRING,
+      },      
     },
     {
       createdAt: false,
