@@ -43,7 +43,19 @@ module.exports = (sequelize, Sequelize) => {
       },
       house: {
         type: Sequelize.STRING,
+      },
+      fathername: {
+        type: Sequelize.STRING,
       },      
+      fathermobile: {
+        type: Sequelize.STRING,
+      },
+      mothername:{
+        type: Sequelize.STRING,
+      },
+      mothermobile: {
+        type: Sequelize.STRING,
+      },
     },
     {
       createdAt: false,

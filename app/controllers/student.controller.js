@@ -37,6 +37,10 @@ exports.create = async (req, res) => {
       date_time:
         new Date().toLocaleString('en-us', { timeZone: 'Asia/Calcutta' }) + '',
       house: req.body.house,  
+      fathername: req.body.fathername,
+      fathermobile: req.body.fathermobile,
+      mothername: req.body.mothername,
+      mothermobile: req.body.mothermobile,
     };
 
     // Save Student in the database
@@ -84,6 +88,10 @@ exports.findAll = async (req, res) => {
         { header: 'Blood Group', key: 'blood_group', width: 40 },
         { header: 'Date Time', key: 'date_time', width: 30 },
         { header: 'House', key: 'house', width: 30 },
+        { header: 'Father Name', key: 'fathername', width: 50 },
+        { header: 'Father Mobile', key: 'fathermobile', width: 20 },
+        { header: 'Mother Name', key: 'mothername', width: 50 },
+        { header: 'Mother Mobile', key: 'mothermobile', width: 20 },
       ]
 
       worksheet.getRow(1).eachCell((cell) => {
