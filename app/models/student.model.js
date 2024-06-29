@@ -58,7 +58,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       rollno: {
         type: Sequelize.STRING,
-      }
+      },
     },
     {
       createdAt: false,
