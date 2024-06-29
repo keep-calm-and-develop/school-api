@@ -59,6 +59,18 @@ module.exports = (sequelize, Sequelize) => {
       rollno: {
         type: Sequelize.STRING,
       },
+      designation: {
+        type: Sequelize.STRING,
+      },
+      date_of_joining:{
+        type: Sequelize.DATE,
+      },
+      department: {
+        type: Sequelize.STRING,
+      },
+      emp_code: {
+        type: Sequelize.STRING,
+      },
     },
     {
       createdAt: false,

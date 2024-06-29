@@ -42,6 +42,10 @@ exports.create = async (req, res) => {
       mothername: req.body.mothername,
       mothermobile: req.body.mothermobile,
       rollno: req.body.rollno,
+      designation: req.body.designation,
+      date_of_joining: req.body.date_of_joining,
+      department: req.body.department,
+      emp_code: req.body.emp_code,
     };
 
     // Save Student in the database
@@ -94,6 +98,10 @@ exports.findAll = async (req, res) => {
         { header: 'Father Mobile', key: 'fathermobile', width: 20 },
         { header: 'Mother Name', key: 'mothername', width: 50 },
         { header: 'Mother Mobile', key: 'mothermobile', width: 20 },
+        { header: 'Designation', key: 'designation', width: 50 },
+        { header: 'Date Of Joining', key: 'date_of_joining', width: 30 },
+        { header: 'Department', key: 'department', width: 50 },
+        { header: 'Employee No.', key: 'emp_code', width: 30 },
       ]
 
       worksheet.getRow(1).eachCell((cell) => {
