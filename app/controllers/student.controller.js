@@ -41,6 +41,7 @@ exports.create = async (req, res) => {
       fathermobile: req.body.fathermobile,
       mothername: req.body.mothername,
       mothermobile: req.body.mothermobile,
+      rollno: req.body.rollno,
     };
 
     // Save Student in the database
@@ -79,6 +80,7 @@ exports.findAll = async (req, res) => {
         { header: 'Mobile 1', key: 'mobile_1', width: 15 },
         { header: 'Mobile 2', key: 'mobile_2', width: 15 },
         { header: 'Address', key: 'address', width: 40 },
+        { header: 'Roll No.', key: 'rollno', width: 10 },
         { header: 'Gr. No', key: 'grno', width: 10 },
         { header: 'Standard', key: 'standard', width: 15 },
         { header: 'Division', key: 'division', width: 15 },

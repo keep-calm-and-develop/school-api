@@ -56,6 +56,9 @@ module.exports = (sequelize, Sequelize) => {
       mothermobile: {
         type: Sequelize.STRING,
       },
+      rollno: {
+        type: Sequelize.STRING,
+      }
     },
     {
       createdAt: false,
